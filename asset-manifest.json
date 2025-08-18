@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/DS_ViecCanLam/static/css/main.472ae812.css",
+    "main.js": "/DS_ViecCanLam/static/js/main.ea93e2bb.js",
+    "static/js/453.d1ebda62.chunk.js": "/DS_ViecCanLam/static/js/453.d1ebda62.chunk.js",
+    "index.html": "/DS_ViecCanLam/index.html",
+    "main.472ae812.css.map": "/DS_ViecCanLam/static/css/main.472ae812.css.map",
+    "main.ea93e2bb.js.map": "/DS_ViecCanLam/static/js/main.ea93e2bb.js.map",
+    "453.d1ebda62.chunk.js.map": "/DS_ViecCanLam/static/js/453.d1ebda62.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.472ae812.css",
+    "static/js/main.ea93e2bb.js"
+  ]
+}
