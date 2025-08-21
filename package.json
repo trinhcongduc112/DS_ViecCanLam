@@ -1,11 +1,11 @@
 {
-  "name": "to_do_list",
+  "name": "ds_vieccanlam",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://trinhcongduc112.github.io/To_do_list",
+  "homepage": "https://trinhcongduc112.github.io/DS_ViecCanLam",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/trinhcongduc112/To_do_list.git"
+    "url": "git+https://github.com/trinhcongduc112/DS_ViecCanLam.git"
   },
   "dependencies": {
     "@atlaskit/button": "^23.3.2",
@@ -22,8 +22,11 @@
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
     "react": "^18.2.0",
+    "react-calendar": "^6.0.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^7.8.1",
     "react-scripts": "5.0.1",
+    "recharts": "^3.1.2",
     "styled-components": "^6.1.19",
     "uuid": "^11.1.0",
     "web-vitals": "^2.1.4"
@@ -37,11 +40,22 @@
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
-    "extends": ["react-app", "react-app/jest"]
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
-    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "devDependencies": {
     "gh-pages": "^6.3.0"

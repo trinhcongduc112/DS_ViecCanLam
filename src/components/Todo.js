@@ -7,6 +7,7 @@ import MoreIcon from "@atlaskit/icon/glyph/more";
 import Textfield from "@atlaskit/textfield";
 import DropdownMenu, { DropdownItemGroup, DropdownItem } from "@atlaskit/dropdown-menu";
 import styled, { css } from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const Row = styled.div`
   background: var(--card);
@@ -18,6 +19,7 @@ const Row = styled.div`
   grid-template-columns: 1fr auto;
   align-items: center;
 `;
+
 
 const Name = styled.div`
   display: flex;
@@ -61,6 +63,8 @@ const Note = styled.div`
 `;
 
 export default function Todo({ todo, onCheckBtnClick, onDelete, onRename }) {
+  // trong component Todo
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [draft, setDraft] = useState(todo.name);
 
@@ -153,6 +157,7 @@ export default function Todo({ todo, onCheckBtnClick, onDelete, onRename }) {
       <InlineActions>
         {!isEditing && (
           <>
+            {/* 
             <Button
               spacing="compact"
               appearance="subtle"
@@ -169,25 +174,27 @@ export default function Todo({ todo, onCheckBtnClick, onDelete, onRename }) {
             >
               Xóa
             </Button>
+            */}
 
             <DropdownMenu
-              placement="bottom-end"
-              trigger={({ triggerRef, ...triggerProps }) => (
-                <Button
-                  {...triggerProps}
-                  ref={triggerRef}
-                  appearance="subtle"
-                  iconBefore={<MoreIcon label="Thêm" />}
-                  onClick={(e) => e.stopPropagation()}
-                />
-              )}
-            >
-              <DropdownItemGroup>
-                <DropdownItem onClick={() => setIsEditing(true)}>Sửa tên</DropdownItem>
-                <DropdownItem onClick={() => onDelete(todo.id)}>Xóa công việc</DropdownItem>
-                <DropdownItem onClick={() => setIsNoteEditing(true)}>📝 Ghi chú</DropdownItem>
-              </DropdownItemGroup>
-            </DropdownMenu>
+                placement="bottom-end"
+                trigger={({ triggerRef, ...triggerProps }) => (
+                  <Button
+                    {...triggerProps}         // phải spread props từ DropdownMenu
+                    ref={triggerRef}
+                    appearance="subtle"
+                    iconBefore={<MoreIcon label="Thêm" />}
+                  />
+                )}
+              >
+                <DropdownItemGroup>
+                  <DropdownItem onClick={() => setIsEditing(true)}>✏️ Sửa tên</DropdownItem>
+                  <DropdownItem onClick={() => onDelete(todo.id)}>🗑️ Xóa công việc</DropdownItem>
+                  <DropdownItem onClick={() => setIsNoteEditing(true)}>📝 Ghi chú</DropdownItem>
+                  <DropdownItem onClick={() => navigate(`/detail/${todo.id}`)}>📄 Chi tiết</DropdownItem>
+                </DropdownItemGroup>
+              </DropdownMenu>
+
           </>
         )}
       </InlineActions>
