@@ -1,4 +1,3 @@
-// pages/TodoListPage.js
 import React, { useEffect, useState, useCallback } from "react";
 import Textfield from "@atlaskit/textfield";
 import Button from "@atlaskit/button";
@@ -47,9 +46,9 @@ const Card = styled.div`
 export default function TodoListPage() {
   const [todoList, setTodoList] = useState([]);
   const [textInput, setTextInput] = useState("");
-  const [isInit, setIsInit] = useState(false);
-  const navigate = useNavigate();
   const [calendarDate, setCalendarDate] = useState(new Date());
+  const [showPopup, setShowPopup] = useState(true); // popup mở khi restart
+  const navigate = useNavigate();
 
   // ---------------- LOCAL STORAGE ----------------
   function loadTodos() {
@@ -75,19 +74,18 @@ export default function TodoListPage() {
 
   useEffect(() => {
     setTodoList(loadTodos());
-    setIsInit(true);
   }, []);
 
   useEffect(() => {
-    if (isInit) saveTodos(todoList);
-  }, [todoList, isInit]);
+    saveTodos(todoList);
+  }, [todoList]);
 
   // ---------------- HANDLERS ----------------
   const addTodo = useCallback(() => {
     const name = textInput.trim();
     if (!name) return;
 
-    const formatted = calendarDate.toISOString().split("T")[0]; // yyyy-mm-dd
+    const formatted = calendarDate.toISOString().split("T")[0];
 
     setTodoList(prev => [
       {
@@ -117,7 +115,6 @@ export default function TodoListPage() {
     []
   );
 
-  // ✅ Fix: nhận thêm startTime / endTime
   const handleRename = useCallback((id, name, note, startTime, endTime) => {
     setTodoList(prev =>
       prev.map(t =>
@@ -144,13 +141,16 @@ export default function TodoListPage() {
   }
 
   // ---------------- RENDER ----------------
+  const formatted = calendarDate.toISOString().split("T")[0];
+  const todayTodos = todoList.filter(t => t.dueDate === formatted);
+
   function renderHeader() {
     return (
       <Header>
         <Title>Danh sách việc cần làm trong ngày</Title>
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <span style={{ color:"var(--muted)", fontSize:14 }}>
-            {todoList.length} việc
+            {todayTodos.length} việc
           </span>
           {" | "}
           <Button appearance="warning" onClick={resetTodos}>
@@ -161,14 +161,18 @@ export default function TodoListPage() {
     );
   }
 
-  function PerformanceChart({ todoList }) {
+  function PerformanceChart({ todoList, calendarDate }) {
+    const formatted = calendarDate.toISOString().split("T")[0];
+    const todayTasks = todoList.filter(t => t.dueDate === formatted);
+
     const data = [
       {
-        name: "Tất cả",
-        done: todoList.filter(t => t.isCompleted).length,
-        pending: todoList.filter(t => !t.isCompleted).length,
+        name: formatted,
+        done: todayTasks.filter(t => t.isCompleted).length,
+        pending: todayTasks.filter(t => !t.isCompleted).length,
       }
     ];
+
     return (
       <Card>
         <h3>📊 Hiệu suất</h3>
@@ -201,10 +205,7 @@ export default function TodoListPage() {
   }
 
   function renderList() {
-    const formatted = calendarDate.toISOString().split("T")[0];
-    const todayTasks = todoList.filter(t => t.dueDate === formatted);
-
-    if (todayTasks.length === 0) {
+    if (todayTodos.length === 0) {
       return (
         <div style={{ marginTop:16 }}>
           <SectionMessage title="Chưa có việc nào" appearance="information">
@@ -215,10 +216,10 @@ export default function TodoListPage() {
     }
     return (
       <TodoList
-        todoList={todayTasks}
+        todoList={todayTodos}
         onCheckBtnClick={handleCheck}
         onDelete={handleDelete}
-        onRename={handleRename}  // ✅ truyền xuống TodoList
+        onRename={handleRename}
       />
     );
   }
@@ -227,6 +228,38 @@ export default function TodoListPage() {
     <Page>
       <GlobalStyle />
       {renderHeader()}
+
+  {/* 🔔 Thông báo hiển thị trên đầu trang */}
+  {showPopup && (
+    <div
+      style={{
+        marginBottom: 16,
+        padding: "12px 16px",
+        borderRadius: 8,
+        backgroundColor: "#e6f4ff",
+        color: "#004085",
+        fontWeight: 500,
+        border: "1px solid #b6daff",
+      }}
+    >
+      {todayTodos.length > 0 ? (
+        <span>
+          📌 Hôm nay bạn có <b>{todayTodos.length}</b> công việc cần làm.
+        </span>
+      ) : (
+        <span>📝 Hôm nay bạn chưa có việc nào, hãy lập kế hoạch nhé!</span>
+      )}
+      {/* <Button
+        spacing="compact"
+        appearance="primary"
+        style={{ marginLeft: 12 }}
+        onClick={() => setShowPopup(false)}
+      >
+        Đóng
+      </Button> */}
+    </div>
+  )}
+
 
       <Content>
         <div>
@@ -251,7 +284,7 @@ export default function TodoListPage() {
               }}
             />
           </Card>
-          <PerformanceChart todoList={todoList} />
+          <PerformanceChart todoList={todoList} calendarDate={calendarDate} />
         </Sidebar>
       </Content>
     </Page>
